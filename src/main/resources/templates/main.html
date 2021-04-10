@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员操作界面</title>
+<!--    <link rel="stylesheet" href="../static/assets/css/main.css">-->
+    <link rel="stylesheet" th:href="@{assets/css/main.css}">
+    <!-- 图标库 -->
+<!--    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />-->
+</head>
+<body onload="queryComb()">
+
+<header>
+    <div class="title">
+        <span shiro:hasRole="admin">管理员操作界面</span>
+        <span shiro:hasRole="user">用户操作界面</span>
+    </div>
+    <nav>
+        <div class="userinfo">
+            <ul>
+                <li>你好，</li>
+                <li><shiro:principal/></li>
+                <li><a th:href="@{/logout}">退出登录</a></li>
+                <li><a th:href="@{/tomain}">返回首页</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="blank-header"></div>
+
+<div class="container">
+    <div class="select">
+        <ul id="accordion" class="accordion">
+            <li>
+                <div class="link"><a th:href="@{/tomain}">首页</a></div>
+            </li>
+            <li>
+                <div class="link">数据可视化</div>
+                <ul class="submenu">
+                    <li><a>Echarts图表</a></li>
+                    <li><a>百度api热力图</a></li>
+                </ul>
+            </li>
+            <!-- admin展示的页面： -->
+            <li shiro:hasRole="admin">
+                <div class="link">用户信息管理</div>
+                <ul class="submenu">
+                    <li><a>查看所有用户</a></li>
+                    <li><a>新增用户信息</a></li>
+                    <li><a>删除指定用户</a></li>
+                    <li><a>修改用户信息</a></li>
+                </ul>
+            </li>
+            <li shiro:hasRole="admin">
+                <div id="user-info" class="link">租房信息管理</div>
+                <ul class="submenu">
+                    <li><a>查看所有租房信息</a></li>
+                    <li><a>新增租房信息</a></li>
+                    <li><a>删除租房信息</a></li>
+                    <li><a>修改租房信息</a></li>
+                </ul>
+            </li>
+            <!-- user展示的页面： -->
+            <li  shiro:hasRole="user">
+                <div class="link">我的</div>
+                <ul class="submenu">
+                    <li><a>个人资料</a></li>
+                    <li><a>我的收藏</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 右侧空间展示 -->
+    <div id="result" class="result">
+
+        <!-- ==========首页========== -->
+        <div class="list">
+            <div class="search">
+                <form>
+
+                    <input type="text" name="" placeholder="请输入">
+                    <input type="submit" value="搜索">
+                </form>
+            </div>
+
+            <div class="condition">
+                <ul class="horizon area">
+                    <li><span><a th:href="@{/tomain}">所有</a></span></li>
+
+                    <li><span>惠城</span></li>
+                    <li><span>惠阳</span></li>
+                    <li><span>大亚湾</span></li>
+                    <li><span>惠东</span></li>
+                    <li><span>博罗</span></li>
+                    <li><span>仲恺</span></li>
+                </ul>
+
+                <ul class="horizon price">
+                    <li><a>租金</a></li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv" checked><span name="0-999999">所有</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="0-1000">≤1000元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="1000-1500">1000-1500元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="1500-2000">1500-2000元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="2000-2500">2000-2500元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="2500-3000">2500-3000元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="3000-5000">3000-5000元</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="price_itv"><span name="5000-9999999">≥5000元</span>
+                        </label>
+                    </li>
+                </ul>
+
+                <ul class="horizon roomType">
+                    <li><a>户型</a></li>
+                    <li>
+                        <label>
+                            <input type="radio" name="type_itv" checked="checked"><span name="">所有</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="type_itv"><span name="1">一</span>居
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="type_itv"><span name="2">两</span>居
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="type_itv"><span name="3">三</span>居
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="type_itv"><span name="4">四</span>居+
+                        </label>
+                    </li>
+                </ul>
+
+                <ul class="horizon position">
+                    <li><a>朝向</a></li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv" checked="checked"><span name="">所有</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="东">东</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="西">西</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="南">南</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="北">北</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="南北">南北</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="东南">东南</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="position_itv"><span name="西南">西南</span>
+                        </label>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div id="main">
+                <ul id="content">
+<!--                    <li class="main-show">-->
+<!--                        <div class="if-img"></div>-->
+<!--                        <div class="info">-->
+<!--                            <i class="if-title" name="title">听涛雅苑</i>-->
+<!--                            <i class="if-mess">-->
+<!--                                <span name="roomType">2室2厅1卫</span> /-->
+<!--                                <span name="square">91</span>平米 /-->
+<!--                                <span name="position">南</span> /-->
+<!--                                <span name="floor">28</span>层-->
+<!--                            </i>-->
+<!--                            <i class="if-mess2" name="address">大亚湾-大亚湾中心区-新际首座</i>-->
+<!--                            <i class="if-mess2" name="area">大亚湾</i>-->
+<!--                            <i class="if-foot">-->
+<!--                                <span class="fa fa-clock-o"></span>-->
+<!--                                1天前维护-->
+<!--                            </i>-->
+<!--                        </div>-->
+<!--                        <i class="if-price"><span name="price">1600</span>元/月</i>-->
+<!--                    </li>-->
+                </ul>
+            </div>
+
+        </div>
+        <!-- ===== End of 首页 ===== -->
+
+        <!-- ==========Echarts图表========== -->
+        <div id="echart" class="list" name="echart">
+            <div id="echart1" style="width: 540px;height:400px;"></div>
+            <div id="echart2" style="width: 540px;height:400px;"></div>
+        </div>
+        <div class="list" name="Bmap">
+            <!--百度地图容器-->
+            <div style="width:700px;height:550px;border:#ccc solid 1px;font-size:12px" id="map"></div>
+            <div id="r-result">
+                <input type="button"  onclick="openHeatmap();" value="显示热力图"/>
+                <input type="button"  onclick="closeHeatmap();" value="关闭热力图"/>
+            </div>
+        </div>
+        <div class="list">
+            <h1>222</h1>
+        </div>
+        <!-- ===== End of Echarts图表 ===== -->
+        <div class="list">
+            <h1>查看所有用户</h1>
+        </div>
+        <div class="list">
+            <h1>新增用户信息</h1>
+        </div>
+
+        <footer>
+            <div class="copyright">
+                &copy; Copyright. All rights reserved. Design by <a>wangzeren</a>
+            </div>
+        </footer>
+
+    </div>
+    <!-- End of 右侧空间展示 -->
+
+</div>
+
+
+<!--******************静态********************-->
+<!-- 框架 -->
+<!--<script src="../static/assets/js/jquery-3.1.1.min.js"></script>-->
+<!--&lt;!&ndash; api[ echarts, 百度api ] &ndash;&gt;-->
+<!--<script src="../static/assets/js/echarts.min.js" type="text/javascript" charset="utf-8"></script>-->
+<!--<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Qhvp16OHnpuAtul1ylfvWGVQKAiVZ3fE"></script>-->
+<!--&lt;!&ndash; 自己的js &ndash;&gt;-->
+<!--<script src="../static/assets/js/main.js"></script>-->
+<!--<script src="../static/assets/js/api.js" type="text/javascript" charset="utf-8"></script>-->
+
+<!--******************渲染********************-->
+<!-- 框架 -->
+<script th:src="@{assets/js/jquery-3.1.1.min.js}"></script>
+<!-- api[ echarts, 百度api ] -->
+<script th:src="@{assets/js/echarts.min.js}" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Qhvp16OHnpuAtul1ylfvWGVQKAiVZ3fE"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/Heatmap/2.0/src/Heatmap_min.js"></script>
+<!-- 自己的js -->
+<script th:src="@{assets/js/main.js}"></script>
+<script th:src="@{assets/js/api.js}" type="text/javascript" charset="utf-8"></script>
+
+</body>
+</html>
